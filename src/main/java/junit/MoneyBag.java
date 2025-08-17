@@ -2,7 +2,7 @@ package junit;
 
 import java.util.*;
 
-class MoneyBag {
+class MoneyBag implements IMoney {
     private final Vector<Money> fMonies = new Vector<>();
 
     MoneyBag(Money m1, Money m2) {
@@ -34,6 +34,29 @@ class MoneyBag {
         return new Vector<>(fMonies);
     }
 
+    @Override
+    public IMoney add(IMoney m) {
+        return m.addMoneyBag(this);
+    }
+
+    @Override
+    public IMoney addMoney(Money m) {
+        MoneyBag result = new MoneyBag(new Money(0,""), new Money(0,""));
+        result.fMonies.clear();
+        result.fMonies.addAll(this.fMonies);
+        result.fMonies.add(m);
+        return result;
+    }
+
+    @Override
+    public IMoney addMoneyBag(MoneyBag bag) {
+        MoneyBag result = new MoneyBag(new Money(0,""), new Money(0,""));
+        result.fMonies.clear();
+        result.fMonies.addAll(this.fMonies);
+        result.fMonies.addAll(bag.fMonies);
+        return result;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

@@ -2,7 +2,7 @@ package junit;
 
 import java.util.Objects;
 
-class Money { 
+class Money implements IMoney{ 
 	private int fAmount; 
 	private String fCurrency; 
 	
@@ -18,9 +18,23 @@ class Money {
 		return fCurrency; 
 	}
 	
-	public Money add(Money m) { 
-		return new Money(amount() + m.amount(), currency()); 
-	}
+	@Override
+    public IMoney add(IMoney m) {
+        return m.addMoney(this); // → double dispatch
+    }
+
+    @Override
+    public IMoney addMoney(Money other) {
+        if (currency().equals(other.currency())) {
+            return new Money(amount() + other.amount(), currency());
+        }
+        return new MoneyBag(this, other);
+    }
+
+    @Override
+    public IMoney addMoneyBag(MoneyBag bag) {
+        return bag.addMoney(this);
+    } 
 	
 	@Override
     public boolean equals(Object obj) {
