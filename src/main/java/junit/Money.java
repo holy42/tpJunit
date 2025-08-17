@@ -14,5 +14,9 @@ class Money {
 	} 
 	public String currency() { 
 		return fCurrency; 
-	} 
+	}
+	
+	public Money add(Money m) { 
+		return new Money(amount() + m.amount(), currency()); 
+		} 
 } 
