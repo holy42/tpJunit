@@ -48,6 +48,7 @@ public class MoneyTest {
         MoneyBag expected = new MoneyBag(new Money[]{ new Money(26,"CHF"), new Money(28,"USD") });
         assertEquals(expected, sum);
     }
+    
     @Test
     public void testEquals() {
         assertTrue(!f12CHF.equals(null));

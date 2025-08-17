@@ -9,12 +9,16 @@ class MoneyBag implements IMoney {
         appendMoney(m1);
         appendMoney(m2);
     }
-    MoneyBag(Money[] bag) {
-        for (Money m : bag) appendMoney(m);
+
+    MoneyBag(Money[] monies) {
+        for (Money m : monies) {
+            appendMoney(m);
+        }
     }
 
     private void appendMoney(Money m) {
         if (m.amount() == 0) return;
+
         for (int i = 0; i < fMonies.size(); i++) {
             Money existing = fMonies.get(i);
             if (existing.currency().equals(m.currency())) {
@@ -30,10 +34,11 @@ class MoneyBag implements IMoney {
         fMonies.add(m);
     }
 
-    Vector<Money> monies() {
+    public Vector<Money> monies() {
         return new Vector<>(fMonies);
     }
 
+    // ===== Implémentation de IMoney =====
     @Override
     public IMoney add(IMoney m) {
         return m.addMoneyBag(this);
@@ -41,19 +46,17 @@ class MoneyBag implements IMoney {
 
     @Override
     public IMoney addMoney(Money m) {
-        MoneyBag result = new MoneyBag(new Money(0,""), new Money(0,""));
-        result.fMonies.clear();
-        result.fMonies.addAll(this.fMonies);
-        result.fMonies.add(m);
+        MoneyBag result = new MoneyBag(this.fMonies.toArray(new Money[0]));
+        result.appendMoney(m);
         return result;
     }
 
     @Override
     public IMoney addMoneyBag(MoneyBag bag) {
-        MoneyBag result = new MoneyBag(new Money(0,""), new Money(0,""));
-        result.fMonies.clear();
-        result.fMonies.addAll(this.fMonies);
-        result.fMonies.addAll(bag.fMonies);
+        MoneyBag result = new MoneyBag(this.fMonies.toArray(new Money[0]));
+        for (Money m : bag.fMonies) {
+            result.appendMoney(m);
+        }
         return result;
     }
     
