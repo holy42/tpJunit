@@ -20,7 +20,7 @@ class Money implements IMoney{
 	
 	@Override
     public IMoney add(IMoney m) {
-        return m.addMoney(this); // → double dispatch
+        return m.addMoney(this); 
     }
 
     @Override

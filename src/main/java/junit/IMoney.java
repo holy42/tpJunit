@@ -5,3 +5,6 @@ public interface IMoney {
     IMoney addMoney(Money m);
     IMoney addMoneyBag(MoneyBag bag);
 }
+
+
+
