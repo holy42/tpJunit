@@ -17,21 +17,37 @@ class MoneyBag implements IMoney {
     }
 
     private void appendMoney(Money m) {
-        if (m.amount() == 0) return;
-
+        if (m.amount() == 0) return; // on n'ajoute pas de zéro
         for (int i = 0; i < fMonies.size(); i++) {
-            Money existing = fMonies.get(i);
-            if (existing.currency().equals(m.currency())) {
-                int sum = existing.amount() + m.amount();
-                if (sum == 0) {
-                    fMonies.remove(i);
-                } else {
-                    fMonies.set(i, new Money(sum, m.currency()));
-                }
+            Money ex = fMonies.get(i);
+            if (ex.currency().equals(m.currency())) {
+                int sum = ex.amount() + m.amount();
+                if (sum == 0) fMonies.remove(i);
+                else fMonies.set(i, new Money(sum, m.currency()));
                 return;
             }
         }
         fMonies.add(m);
+    }
+    
+    @Override
+    public IMoney addMoney(Money m) {
+        MoneyBag res = new MoneyBag(this.fMonies.toArray(new Money[0]));
+        res.appendMoney(m);
+        return res.simplified();             
+    }
+
+    @Override
+    public IMoney addMoneyBag(MoneyBag bag) {
+        MoneyBag res = new MoneyBag(this.fMonies.toArray(new Money[0]));
+        for (Money x : bag.fMonies) res.appendMoney(x);
+        return res.simplified();              
+    }
+
+    private IMoney simplified() {
+        if (fMonies.isEmpty()) return new Money(0, "");
+        if (fMonies.size() == 1) return fMonies.firstElement();
+        return this;
     }
 
     public Vector<Money> monies() {
@@ -41,22 +57,6 @@ class MoneyBag implements IMoney {
     @Override
     public IMoney add(IMoney m) {
         return m.addMoneyBag(this);
-    }
-
-    @Override
-    public IMoney addMoney(Money m) {
-        MoneyBag result = new MoneyBag(this.fMonies.toArray(new Money[0]));
-        result.appendMoney(m);
-        return result;
-    }
-
-    @Override
-    public IMoney addMoneyBag(MoneyBag bag) {
-        MoneyBag result = new MoneyBag(this.fMonies.toArray(new Money[0]));
-        for (Money m : bag.fMonies) {
-            result.appendMoney(m);
-        }
-        return result;
     }
     
     @Override
