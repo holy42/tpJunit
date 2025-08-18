@@ -38,7 +38,6 @@ class MoneyBag implements IMoney {
         return new Vector<>(fMonies);
     }
 
-    // ===== Implémentation de IMoney =====
     @Override
     public IMoney add(IMoney m) {
         return m.addMoneyBag(this);

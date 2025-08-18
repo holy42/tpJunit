@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class MoneyTest {
 	
-	private Money f12CHF, f14CHF, f7USD, f21USD;
+	private Money f12CHF, f14CHF, f7USD, f21USD, fMinus12CHF;
     private MoneyBag fMB1, fMB2;
 
     @Before
@@ -16,8 +16,24 @@ public class MoneyTest {
         f14CHF = new Money(14, "CHF");
         f7USD  = new Money(7,  "USD");
         f21USD = new Money(21, "USD");
+        fMinus12CHF = new Money(-12, "CHF");
         fMB1   = new MoneyBag(new Money[]{ f12CHF, f7USD });
         fMB2   = new MoneyBag(new Money[]{ f14CHF, f21USD });
+    }
+    
+    @Test
+    public void testSimplifyBagToMoney() {
+        MoneyBag bag = new MoneyBag(new Money[]{ f12CHF, f7USD });
+        IMoney sum = bag.add(fMinus12CHF);
+        assertEquals(new Money(7, "USD"), sum); 
+        assertTrue(sum instanceof Money);
+    }
+
+    @Test
+    public void testZeroElimination() {
+        MoneyBag bag = new MoneyBag(new Money[]{ new Money(5,"EUR"), new Money(-5,"EUR") });
+        IMoney res = bag.add(new Money(0,"EUR"));
+        assertEquals(new Money(0, ""), res);
     }
 	
     @Test
